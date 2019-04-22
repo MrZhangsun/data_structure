@@ -10,6 +10,10 @@ import java.util.Random;
 public class Main {
 
     public static void main(String[] args) {
+       calculate();
+    }
+
+    private static void test1() {
         int n = 10;
         Random random = new Random();
 
@@ -33,5 +37,55 @@ public class Main {
 
         System.out.println("Done");
 
+    }
+
+    private static void replace(Integer val) {
+        int n = 10;
+        Random random = new Random();
+        MaxBinaryHeap<Integer> heap = new MaxBinaryHeap<Integer>();
+        for (int i = 0; i < n; i++) {
+            heap.add(random.nextInt(Integer.MAX_VALUE));
+        }
+
+        System.out.println(heap);
+        Integer max = heap.replace(val);
+        System.out.printf("max: %d, new: %d ", max, val);
+        System.out.println(heap);
+    }
+
+    private static long toHeap1() {
+        long b = System.currentTimeMillis();
+        int n = 1000000;
+        Random random = new Random();
+        Integer[] arr = new Integer[n];
+        for (int i = 0; i < n; i++) {
+            arr[i] = random.nextInt(Integer.MAX_VALUE);
+        }
+        MaxBinaryHeap<Integer> heap = new MaxBinaryHeap<Integer>(arr);
+
+        long e = System.currentTimeMillis();
+        return e - b;
+    }
+
+    private static long toHeap2() {
+        long b = System.currentTimeMillis();
+        int n = 1000000;
+        Random random = new Random();
+        MaxBinaryHeap<Integer> heap = new MaxBinaryHeap<Integer>();
+        for (int i = 0; i < n; i++) {
+            heap.add(random.nextInt(Integer.MAX_VALUE));
+        }
+
+        long e = System.currentTimeMillis();
+        return e - b;
+    }
+
+    private static void calculate() {
+        long c1 = toHeap1();
+        long c2 = toHeap2();
+        long gap = c1 - c2;
+        System.out.printf("Cost time millis: %d\n", gap);
+        double seconds = gap / 1000000000.0;
+        System.out.printf("Cost seconds: %f", seconds);
     }
 }

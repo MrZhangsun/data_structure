@@ -1,6 +1,7 @@
 package com.zhangsun.study.datastructure.heap;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -28,7 +29,15 @@ public class MaxBinaryHeap<E extends Comparable<E>> {
     }
 
     public MaxBinaryHeap() {
-        heap = new ArrayList<E>();
+        this(16);
+    }
+
+    public MaxBinaryHeap(E[] arr) {
+        // convert arr to List
+        heap = Arrays.asList(arr);
+        for (int i = heap.size() - 1; i >= 0; i--) {
+            siftDown(i);
+        }
     }
 
     public int size() {
@@ -163,5 +172,20 @@ public class MaxBinaryHeap<E extends Comparable<E>> {
     @Override
     public String toString() {
         return heap.toString();
+    }
+
+    /**
+     * Replace the max element with new element
+     *
+     * @param e new element
+     * @return Max Value
+     */
+    public E replace(E e) {
+        E max = getMax();
+        // set the first value to new element
+        heap.set(0, e);
+        // reset heap
+        siftDown(0);
+        return max;
     }
 }
