@@ -67,6 +67,40 @@ public class SegmentTree<E> {
         tree[index] = merger.merge(tree[leftChild], tree[rightChild]);
     }
 
+    /**
+     * 线段树的区间查找
+     *
+     * @param queryL 区间左边界
+     * @param queryR 区间右边界
+     * @return 查找结果
+     */
+    public E query(int queryL, int queryR) {
+
+        if (queryL < 0 || queryL >= tree.length || queryR < 0 || queryR >= tree.length || queryL > queryR) {
+            throw new IllegalStateException("Illegal Index: l = " + queryL + " r = " + queryR);
+        }
+        return query(0, 0, tree.length - 1, queryL, queryR);
+    }
+
+    private E query(int treeIndex, int l, int r, int queryL, int queryR) {
+        if (r == queryR && l == queryL) {
+            return tree[treeIndex];
+        }
+        int mid = l + (r - l) / 2;
+        int leftTreeIndex = leftChild(treeIndex);
+        int rightTreeIndex = rightChild(treeIndex);
+
+        if (mid >= queryR) {
+            return query(leftTreeIndex, l, mid, queryL, queryR);
+        } else if(mid + 1 <= queryL) {
+            return query(rightTreeIndex, mid + 1, r, queryL, queryR);
+        }
+
+        E leftResult = query(leftTreeIndex, l, mid, queryL, mid);
+        E rightResult = query(rightTreeIndex, mid + 1, r, mid + 1, queryR);
+
+        return merger.merge(leftResult, rightResult);
+    }
     @Override
     public String toString() {
         return "SegmentTree{" +
